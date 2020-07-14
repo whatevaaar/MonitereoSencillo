@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/c0d1bc6122.js"></script>
+    <style>
+        .fa {
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <select id="selectBox" class="custom-select custom-select" onchange="actualizar()">
+            <option selected>Seleccionar cuenta</option>
+            <option value="Iberdrola">Iberdrola</option>
+            <option value="ICA">ICA</option>
+            <option value="Newmont">Newmont</option>
+            <option value="Newmont Brend">Newmont Brend</option>
+            <option value="Vitalmex">Vitalmex</option>
+            <option value="Chemours">Chemours</option>
+            <option value="Farmacias del Ahorro">Farmacias del Ahorro</option>
+            <option value="Cementos Moctezuma">Cementos Moctezuma</option>
+            <option value="Canon">Canon</option>
+            <option value="Element">Element</option>
+            <option value="José Cuervo">José Cuervo</option>
+            <option value="Mitsubishi">Mitsubishi</option>
+            <option value="DellEMC">Dell EMC</option>
+            <option value="Caden">Caden</option>
+            <option value="Axalta">Axalta</option>
+            <option value="Emilio Moro">Emilio Moro</option>
+            <option value="EY">EY</option>
+            <option value="Siemens">Siemens</option>
+            <option value="Panamericansilver">Panamericansilver</option>
+            <option value="Anafapyt">Anafapyt</option>
+            <option value="Mckinsey">Mckinsey</option>
+            <option value="IDEI">IDEI</option>
+            <option value="Del Fuerte">Del Fuerte</option>
+            <option value="CORONOVIRUS INDUSTRIAS">CORONOVIRUS INDUSTRIAS</option>
+            <option value="GBM TEMPORAL">GBM TEMPORAL</option>
+            <option value="Cuervo Especial">Cuervo Especial</option>
+            <option value="CanastaXmexico">CanastaXmexico</option>
+            <option value="ADI">ADI</option>
+            <option value="Edenred">Edenred</option>
+            <option value="CENACED">CENACED</option>
+            <option value="Fundary">Fundary</option>
+            <option value="Stendhalpharma y Maypo">Stendhalpharma y Maypo</option>
+        </select>
+        <i class="fa fa-check" id="30Porciento" aria-hidden="true"></i>
+        <i class="fa fa-check" id="60Porciento" aria-hidden="true"></i>
+        <i class="fa fa-check" id="90Porciento" aria-hidden="true"></i>
+        <span id="tasa-apertura">0%</span>
+    </div>
+    <!--Firebase-->
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyA9_sYMUtr78YG4FJlx4uzSmKG8zHAXhxc",
+            authDomain: "mail-monitoring-ac607.firebaseapp.com",
+            databaseURL: "https://mail-monitoring-ac607.firebaseio.com",
+            projectId: "mail-monitoring-ac607",
+            storageBucket: "mail-monitoring-ac607.appspot.com",
+            messagingSenderId: "878058751892",
+            appId: "1:878058751892:web:3d12af3b97921f71c77181",
+            measurementId: "G-GPSCFX18BT"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        function actualizar() {
+            let selectBox = document.getElementById("selectBox");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            firebase.database().ref('cuentas/' + selectedValue + '/').on("value", snap => {
+                let totalEnviados = 0;
+                let totalLeidos = 0;
+                snap.forEach(element => {
+                    let dato = element.val();
+                    totalEnviados += Number(dato.correos_enviados);
+                    totalLeidos += Number(dato.correos_leidos);
+                });
+                let div = (totalLeidos / totalEnviados) * 100;
+                if(div <= 33){
+                    document.getElementById("30Porciento").style.color = "green";
+                    document.getElementById("60Porciento").style.color = "grey";
+                    document.getElementById("90Porciento").style.color = "grey";
+                }
+                else if(div > 33 && div < 66){
+                    document.getElementById("30Porciento").style.color = "green";
+                    document.getElementById("60Porciento").style.color = "green";
+                    document.getElementById("90Porciento").style.color = "grey";
+                }
+                else if(div >= 66){
+                    document.getElementById("30Porciento").style.color = "green";
+                    document.getElementById("60Porciento").style.color = "green";
+                    document.getElementById("90Porciento").style.color = "green";
+                }
+                else{
+                    document.getElementById("30Porciento").style.color = "gray";
+                    document.getElementById("60Porciento").style.color = "gray";
+                    document.getElementById("90Porciento").style.color = "gray";
+                }
+                document.getElementById("tasa-apertura").innerHTML = (div.toFixed(2)).toString() + '%';
+            });
+        }
+    </script>
+</body>
+
+</html>
