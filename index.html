@@ -90,6 +90,11 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
+
+        function crearFecha(fecha) {
+            let partes = fecha.split('-');
+            return new Date(partes[0], partes[1] - 1, partes[2]);
+        }
         function actualizar() {
             let selectBox = document.getElementById("selectBox");
             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -98,8 +103,11 @@
                 let totalLeidos = 0;
                 snap.forEach(element => {
                     let dato = element.val();
-                    totalEnviados += Number(dato.correos_enviados);
-                    totalLeidos += Number(dato.correos_leidos);
+                    let fecha = crearFecha(dato.fecha);
+                    if (fecha.toDateString() == new Date().toDateString()) {
+                        totalEnviados += Number(dato.correos_enviados);
+                        totalLeidos += Number(dato.correos_leidos);
+                    }
                 });
                 let div = (totalLeidos / totalEnviados) * 100;
                 if (div <= 33) {
