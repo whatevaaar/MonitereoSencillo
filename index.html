@@ -20,6 +20,8 @@
         .fa {
             color: gray;
         }
+        body{ background-color: #eceef0 ;}
+
     </style>
 
     <title>Monitoreo de Extrategia</title>
@@ -27,8 +29,20 @@
 
 <body>
     <div class="container-fluid">
-        <div class="row justify-content-md-center">
-            <div class="col-8">
+        <div class="row justify-content-center mt-4">
+            <h1 class="font-weight-bold">OPEN RATE</h1>
+        </div>
+        <div class="row justify-content-center">
+            <h3>Media intelligence diario</h2>
+        </div>
+        <div class="row justify-content-center mt-5 ml-1 mr-1">
+            <br/>
+            <p class="text-center font-weight-light">Selecciona una cuenta en el menú para
+                revisar la taza de apertura del newsletter
+                de Media intelligence del día de hoy.</p>
+        </div>
+        <div class="row justify-content-center mt-5 mb-5">
+            <div>
                 <select id="selectBox" class="custom-select custom-select" onchange="actualizar()">
                     <option selected>Seleccionar cuenta</option>
                     <option value="Iberdrola">Iberdrola</option>
@@ -64,7 +78,7 @@
                     <option value="Fundary">Fundary</option>
                     <option value="Stendhalpharma y Maypo">Stendhalpharma y Maypo</option>
                 </select></div>
-            <div class="col-4">
+            <div class="ml-4 mt-1">
                 <i class="fa fa-check" id="30Porciento" aria-hidden="true"></i>
                 <i class="fa fa-check" id="60Porciento" aria-hidden="true"></i>
                 <i class="fa fa-check" id="90Porciento" aria-hidden="true"></i>
@@ -135,5 +149,9 @@
         }
     </script>
 </body>
+<footer class="fixed-bottom">
+  <div class="footer-copyright text-center py-3">Extrategia©
+  </div>
 
+</footer>
 </html>
